@@ -11,5 +11,6 @@
     "composite": true,
     "resolveJsonModule": true
   },
-  "exclude": ["dist/**", "tests/**", "node_modules"]
+  "exclude": ["dist/**", "tests/**", "node_modules"],
+  "include": ["src/**/*", "package.json"]
 }

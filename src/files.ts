@@ -1,8 +1,20 @@
 import fs from "fs/promises";
 import { debug } from "./debug";
+import { program } from "./cli";
+
+export function folder(): string {
+  let rootFolder = program.opts().folder ?? "./";
+  if (rootFolder.endsWith("/") === false) rootFolder += "/";
+  return rootFolder + ".zkcloudworker/";
+}
+
+export function rootFolder(): string {
+  let rootFolder = program.opts().folder ?? "./";
+  if (rootFolder.endsWith("/") === false) rootFolder += "/";
+  return rootFolder;
+}
 
 export type FileEncoding = "text" | "binary";
-const folder = "./.zkcloudworker/";
 
 export async function write(params: {
   data: object;
@@ -11,7 +23,7 @@ export async function write(params: {
 }): Promise<string | undefined> {
   const { data, filename, allowRewrite } = params;
 
-  const name = folder + filename + ".json";
+  const name = folder() + filename + ".json";
   try {
     await createDirectories();
     if (debug())
@@ -36,7 +48,19 @@ export async function write(params: {
 }
 
 export async function load(filename: string) {
-  const name = folder + filename + ".json";
+  const name = folder() + filename + ".json";
+  try {
+    const filedata = await fs.readFile(name, "utf8");
+    const data = JSON.parse(filedata);
+    return data;
+  } catch (e) {
+    console.error(`File ${name} does not exist or has wrong format`);
+    return undefined;
+  }
+}
+
+export async function loadPackageJson() {
+  const name = rootFolder() + "package.json";
   try {
     const filedata = await fs.readFile(name, "utf8");
     const data = JSON.parse(filedata);
@@ -48,7 +72,7 @@ export async function load(filename: string) {
 }
 
 export async function isFileExist(filename: string): Promise<boolean> {
-  const name = folder + filename + ".json";
+  const name = folder() + filename + ".json";
   try {
     if (debug())
       console.log("isFileExist", {
@@ -66,7 +90,7 @@ export async function isFileExist(filename: string): Promise<boolean> {
 
 export async function loadBinary(filename: string) {
   try {
-    return await fs.readFile(filename, "binary");
+    return await fs.readFile(filename);
   } catch (e) {
     console.error(`Cannot read file ${filename}`, e);
     return undefined;
@@ -100,7 +124,7 @@ export async function saveText(params: { data: string; filename: string }) {
   }
 }
 
-async function isExist(name: string): Promise<boolean> {
+export async function isExist(name: string): Promise<boolean> {
   // check if file exists
   try {
     await fs.access(name);
@@ -112,10 +136,10 @@ async function isExist(name: string): Promise<boolean> {
 }
 
 async function backup(filename: string) {
-  const name = folder + filename + ".json";
+  const name = folder() + filename + ".json";
 
   const backupName =
-    folder + "backup/" + filename + "." + getFormattedDateTime() + ".json";
+    folder() + "backup/" + filename + "." + getFormattedDateTime() + ".json";
   // check if file exists
   try {
     await fs.access(name);
@@ -127,20 +151,20 @@ async function backup(filename: string) {
   await fs.copyFile(name, backupName);
 }
 
-async function createDirectories() {
+export async function createDirectories() {
   // check if data directory exists
   try {
-    await fs.access(folder);
+    await fs.access(folder());
   } catch (e) {
     // if not, create it
-    await fs.mkdir(folder);
+    await fs.mkdir(folder());
   }
   // check if data directory exists
   try {
-    await fs.access(folder + "backup");
+    await fs.access(folder() + "backup");
   } catch (e) {
     // if not, create it
-    await fs.mkdir(folder + "backup");
+    await fs.mkdir(folder() + "backup");
   }
 }
 
