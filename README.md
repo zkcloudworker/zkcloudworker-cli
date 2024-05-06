@@ -32,6 +32,26 @@ npm update -g zkcloudworker-cli
 zkcw deploy
 ```
 
+The package should have at the root directory index.ts file that exports the zkcloudworker function:
+
+```typescript
+// index.ts at the package root directory
+import { Cloud, zkCloudWorker } from "zkcloudworker";
+import { MyWorker } from "./src/worker";
+
+export async function zkcloudworker(cloud: Cloud): Promise<zkCloudWorker> {
+  return new MyWorker(cloud);
+}
+```
+
+and the directory in tsconfig.json for `tsc` compilation result should be `dist`:
+
+```
+"compilerOptions": {
+    "outDir": "./dist"
+}
+```
+
 ## Getting help
 
 ```sh
