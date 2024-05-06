@@ -4,7 +4,7 @@ exports.deploy = void 0;
 const files_1 = require("./files");
 const options_1 = require("./options");
 const zip_1 = require("./zip");
-const s3_1 = require("./s3");
+const upload_1 = require("./upload");
 const install_1 = require("./install");
 const debug_1 = require("./debug");
 async function deploy() {
@@ -24,11 +24,7 @@ async function deploy() {
         console.error("Error reading zip file");
         return;
     }
-    await (0, s3_1.putToS3)({
-        data,
-        mimeType: "application/zip",
-        filename: developer + "/" + repo + ".zip",
-    });
+    await (0, upload_1.upload)({ data, mimeType: "application/zip", developer, repo, JWT });
     await (0, install_1.install)({ JWT, repo, developer, packageManager });
 }
 exports.deploy = deploy;
