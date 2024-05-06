@@ -12,7 +12,7 @@ async function writeConfig(config) {
             filename: "config",
             allowRewrite: true,
         });
-        console.log(`MinaNFT JWT token has been set`);
+        console.log(`New default configuration has been set`, config);
     }
     catch (e) {
         console.error(e);
@@ -27,7 +27,7 @@ async function getConfig() {
         return data;
     }
     catch (e) {
-        console.error("Error reading config.json file:", e);
+        //console.error("Error reading config.json file:", e);
         return undefined;
     }
 }

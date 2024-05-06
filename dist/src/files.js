@@ -3,13 +3,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveText = exports.saveBinary = exports.loadText = exports.loadBinary = exports.isFileExist = exports.load = exports.write = void 0;
+exports.createDirectories = exports.isExist = exports.saveText = exports.saveBinary = exports.loadText = exports.loadBinary = exports.isFileExist = exports.loadPackageJson = exports.load = exports.write = exports.rootFolder = exports.folder = void 0;
 const promises_1 = __importDefault(require("fs/promises"));
 const debug_1 = require("./debug");
-const folder = "./.zkcloudworker/";
+const cli_1 = require("./cli");
+function folder() {
+    let rootFolder = cli_1.program.opts().folder ?? "./";
+    if (rootFolder.endsWith("/") === false)
+        rootFolder += "/";
+    return rootFolder + ".zkcloudworker/";
+}
+exports.folder = folder;
+function rootFolder() {
+    let rootFolder = cli_1.program.opts().folder ?? "./";
+    if (rootFolder.endsWith("/") === false)
+        rootFolder += "/";
+    return rootFolder;
+}
+exports.rootFolder = rootFolder;
 async function write(params) {
     const { data, filename, allowRewrite } = params;
-    const name = folder + filename + ".json";
+    const name = folder() + filename + ".json";
     try {
         await createDirectories();
         if ((0, debug_1.debug)())
@@ -33,7 +47,7 @@ async function write(params) {
 }
 exports.write = write;
 async function load(filename) {
-    const name = folder + filename + ".json";
+    const name = folder() + filename + ".json";
     try {
         const filedata = await promises_1.default.readFile(name, "utf8");
         const data = JSON.parse(filedata);
@@ -45,8 +59,21 @@ async function load(filename) {
     }
 }
 exports.load = load;
+async function loadPackageJson() {
+    const name = rootFolder() + "package.json";
+    try {
+        const filedata = await promises_1.default.readFile(name, "utf8");
+        const data = JSON.parse(filedata);
+        return data;
+    }
+    catch (e) {
+        console.error(`File ${name} does not exist or has wrong format`);
+        return undefined;
+    }
+}
+exports.loadPackageJson = loadPackageJson;
 async function isFileExist(filename) {
-    const name = folder + filename + ".json";
+    const name = folder() + filename + ".json";
     try {
         if ((0, debug_1.debug)())
             console.log("isFileExist", {
@@ -66,7 +93,7 @@ async function isFileExist(filename) {
 exports.isFileExist = isFileExist;
 async function loadBinary(filename) {
     try {
-        return await promises_1.default.readFile(filename, "binary");
+        return await promises_1.default.readFile(filename);
     }
     catch (e) {
         console.error(`Cannot read file ${filename}`, e);
@@ -115,9 +142,10 @@ async function isExist(name) {
         return false;
     }
 }
+exports.isExist = isExist;
 async function backup(filename) {
-    const name = folder + filename + ".json";
-    const backupName = folder + "backup/" + filename + "." + getFormattedDateTime() + ".json";
+    const name = folder() + filename + ".json";
+    const backupName = folder() + "backup/" + filename + "." + getFormattedDateTime() + ".json";
     // check if file exists
     try {
         await promises_1.default.access(name);
@@ -132,21 +160,22 @@ async function backup(filename) {
 async function createDirectories() {
     // check if data directory exists
     try {
-        await promises_1.default.access(folder);
+        await promises_1.default.access(folder());
     }
     catch (e) {
         // if not, create it
-        await promises_1.default.mkdir(folder);
+        await promises_1.default.mkdir(folder());
     }
     // check if data directory exists
     try {
-        await promises_1.default.access(folder + "backup");
+        await promises_1.default.access(folder() + "backup");
     }
     catch (e) {
         // if not, create it
-        await promises_1.default.mkdir(folder + "backup");
+        await promises_1.default.mkdir(folder() + "backup");
     }
 }
+exports.createDirectories = createDirectories;
 function getFormattedDateTime() {
     const now = new Date();
     const year = now.getFullYear();
