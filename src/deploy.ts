@@ -1,7 +1,7 @@
 import { createDirectories, loadBinary } from "./files";
 import { options } from "./options";
 import { zip } from "./zip";
-import { putToS3 } from "./s3";
+import { upload } from "./upload";
 import { install } from "./install";
 import { debug } from "./debug";
 
@@ -22,10 +22,7 @@ export async function deploy() {
     console.error("Error reading zip file");
     return;
   }
-  await putToS3({
-    data,
-    mimeType: "application/zip",
-    filename: developer + "/" + repo + ".zip",
-  });
+  await upload({ data, mimeType: "application/zip", developer, repo, JWT });
+
   await install({ JWT, repo, developer, packageManager });
 }

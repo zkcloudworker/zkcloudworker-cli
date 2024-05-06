@@ -33,10 +33,12 @@ export async function install(params: {
     args: packageManager,
     metadata: `deploy ${repo} by ${developer} using ${packageManager} package manager`,
     mode: "async",
+    JWT,
   });
   if (debug()) console.log(`deploy api call result:`, answer);
   const jobId = answer.jobId;
   console.log(`Installing dependencies, install job id:`, jobId);
+  console.log(`This may take a few minutes...`);
   let result: string | undefined = undefined;
   if (debug()) console.log(`waiting for job result...`);
   while (result === undefined) {

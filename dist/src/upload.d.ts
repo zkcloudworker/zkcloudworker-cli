@@ -1,6 +1,8 @@
 /// <reference types="node" />
-export declare function putToS3(params: {
+export declare function upload(params: {
     data: Buffer;
     mimeType: string | undefined;
-    filename: string;
+    developer: string;
+    repo: string;
+    JWT?: string;
 }): Promise<void>;
