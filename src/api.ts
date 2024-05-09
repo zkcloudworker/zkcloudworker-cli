@@ -11,6 +11,7 @@ export async function zkCloudWorkerRequest(params: {
   repo?: string;
   developer?: string;
   JWT?: string;
+  includeLogs?: boolean;
 }) {
   const {
     command,
@@ -23,6 +24,7 @@ export async function zkCloudWorkerRequest(params: {
     repo,
     developer,
     JWT,
+    includeLogs,
   } = params;
   const apiData = {
     auth: "M6t4jtbBAFFXhLERHQWyEB9JA9xi4cWqmYduaCXtbrFjb7yaY7TyaXDunKDJNiUTBEcyUomNXJgC",
@@ -39,6 +41,7 @@ export async function zkCloudWorkerRequest(params: {
       metadata,
       mode: mode ?? "sync",
       jobId,
+      includeLogs,
     },
     chain: `devnet`,
   };

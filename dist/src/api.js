@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.zkCloudWorkerRequest = void 0;
 const axios_1 = __importDefault(require("axios"));
 async function zkCloudWorkerRequest(params) {
-    const { command, task, transactions, args, metadata, mode, jobId, repo, developer, JWT, } = params;
+    const { command, task, transactions, args, metadata, mode, jobId, repo, developer, JWT, includeLogs, } = params;
     const apiData = {
         auth: "M6t4jtbBAFFXhLERHQWyEB9JA9xi4cWqmYduaCXtbrFjb7yaY7TyaXDunKDJNiUTBEcyUomNXJgC",
         command: command,
@@ -21,6 +21,7 @@ async function zkCloudWorkerRequest(params) {
             metadata,
             mode: mode ?? "sync",
             jobId,
+            includeLogs,
         },
         chain: `devnet`,
     };

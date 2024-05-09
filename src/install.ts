@@ -2,6 +2,7 @@ import { zkCloudWorkerRequest } from "./api";
 import { sleep } from "./sleep";
 import { debug } from "./debug";
 import chalk from "chalk";
+import { all } from "axios";
 
 /*
 export async function zkCloudWorkerRequest(params: {
@@ -40,15 +41,59 @@ export async function install(params: {
   console.log(`Installing dependencies, install job id:`, jobId);
   console.log(`This may take a few minutes...`);
   let result: string | undefined = undefined;
-  if (debug()) console.log(`waiting for job result...`);
-  while (result === undefined) {
-    await sleep(20000);
+  const allLogs: string[] = [];
+  const printedLogs: string[] = [];
+
+  function print(logs: string[], printLogs: boolean) {
+    allLogs.push(...logs);
+    logs.forEach((log) => {
+      if (printedLogs.includes(log) === false) {
+        printedLogs.push(log);
+        // replace all occurrences of "error" with red color
+
+        if (printLogs) {
+          const text = log.replace(/error/gi, (matched) => chalk.red(matched));
+          console.log(text);
+        }
+      }
+    });
+  }
+
+  let isAllLogsFetchedFlag = false;
+
+  while (result === undefined || isAllLogsFetchedFlag === false) {
+    await sleep(10000);
     answer = await zkCloudWorkerRequest({
       command: "jobResult",
       jobId,
+      includeLogs: true,
     });
-    if (debug()) console.log(`jobResult api call result:`, answer);
     result = answer.result;
+
+    //if (debug()) console.log(`jobResult api call result:`, answer);
+    if (
+      answer?.logs !== undefined &&
+      answer?.logs !== null &&
+      Array.isArray(answer.logs) === true
+    )
+      print(answer.logs, debug());
+    isAllLogsFetchedFlag = isAllLogsFetched(allLogs);
+    if (
+      answer.jobStatus === "failed" &&
+      debug() === false &&
+      isAllLogsFetchedFlag === true
+    ) {
+      if (
+        answer?.logs !== undefined &&
+        answer?.logs !== null &&
+        Array.isArray(answer.logs) === true
+      )
+        print(answer.logs, true);
+      console.error(
+        chalk.red(`ERROR: Deployment failed`) + result ? `: ${result}` : ""
+      );
+      process.exit(1);
+    }
   }
   if (result !== "deployed") {
     console.error(chalk.red(`ERROR: Deployment failed: `) + result);
@@ -56,4 +101,9 @@ export async function install(params: {
   } else {
     console.log(chalk.green(`SUCCESS: Deployment completed`));
   }
+}
+
+function isAllLogsFetched(logs: string[]): boolean {
+  // search for "Billed Duration" in the logs and return true if found
+  return logs.some((log) => log.includes("Billed Duration"));
 }

@@ -27,7 +27,13 @@ export async function zip(repo: string): Promise<string | undefined> {
 
     archive.glob("**/*", {
       cwd: sourceDir,
-      ignore: ["node_modules/**", "yarn.lock", ".yarn/**", ".zkcloudworker/**"],
+      ignore: [
+        "node_modules/**",
+        "yarn.lock",
+        ".yarn/**",
+        ".zkcloudworker/**",
+        "dist/**",
+      ],
       dot: true,
     });
 
