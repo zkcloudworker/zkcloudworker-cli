@@ -9,4 +9,5 @@ export declare function zkCloudWorkerRequest(params: {
     repo?: string;
     developer?: string;
     JWT?: string;
+    includeLogs?: boolean;
 }): Promise<any>;

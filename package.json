@@ -13,7 +13,7 @@
     "web3",
     "zero knowledge"
   ],
-  "version": "0.1.4",
+  "version": "0.2.3",
   "author": "dfst.io",
   "license": "Apache-2.0",
   "homepage": "https://docs.zkcloudworker.com",
@@ -25,9 +25,9 @@
     "url": "https://github.com/zkcloudworker/zkcloudworker-cli/issues"
   },
   "bin": {
-    "zkcw": "./dist/src/cli.js",
     "zkcloudworker": "./dist/src/cli.js",
-    "zkcloudworker-cli": "./dist/src/cli.js"
+    "zkcloudworker-cli": "./dist/src/cli.js",
+    "zkcw": "./dist/src/cli.js"
   },
   "engines": {
     "node": ">=18.14.0"
@@ -40,11 +40,11 @@
   },
   "devDependencies": {
     "@types/archiver": "^6.0.2",
-    "@types/node": "^20.12.9",
+    "@types/node": "^20.12.11",
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.569.0",
+    "@aws-sdk/client-s3": "^3.572.0",
     "archiver": "^7.0.1",
     "axios": "^1.6.8",
     "chalk": "^4.1.2",

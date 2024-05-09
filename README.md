@@ -32,6 +32,12 @@ npm update -g zkcloudworker-cli
 zkcw deploy
 ```
 
+or, to see the logs:
+
+```sh
+zkcw deploy -v
+```
+
 The package should have at the root directory index.ts file that exports the zkcloudworker function:
 
 ```typescript
@@ -65,7 +71,7 @@ zkCloudWorker CLI tool
 
 Options:
   -V, --version                output the version number
-  -v, --verbose                verbose mode
+  -v, --verbose                verbose mode, print all logs
   -f, --folder <folder>        folder with repo
   -r, --repo <repo>            repo name
   -d, --developer <developer>  developer name

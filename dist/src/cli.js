@@ -11,7 +11,7 @@ exports.program
     .name("zkCloudWorker")
     .description("zkCloudWorker CLI tool")
     .version(package_json_1.version)
-    .option("-v, --verbose", "verbose mode")
+    .option("-v, --verbose", "verbose mode, print all logs")
     .option("-f, --folder <folder>", "folder with repo")
     .option("-r, --repo <repo>", "repo name")
     .option("-d, --developer <developer>", "developer name")
