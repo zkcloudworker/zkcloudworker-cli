@@ -3,7 +3,10 @@ import archiver from "archiver";
 import { folder, rootFolder, isExist } from "./files";
 import { debug } from "./debug";
 
-export async function zip(repo: string): Promise<string | undefined> {
+export async function zip(
+  repo: string,
+  exclude: string[]
+): Promise<string | undefined> {
   try {
     const sourceDir = rootFolder();
     const zipFileName = folder() + `${repo}.zip`;
@@ -33,6 +36,14 @@ export async function zip(repo: string): Promise<string | undefined> {
         ".yarn/**",
         ".zkcloudworker/**",
         "dist/**",
+        "test/**",
+        "tests/**",
+        "cache/**",
+        "pnp.cjs",
+        ".pnp.loader.mjs",
+        ".vscode/**",
+        ".DS_Store",
+        ...exclude,
       ],
       dot: true,
     });

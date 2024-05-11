@@ -15,16 +15,17 @@ program
   .option("-f, --folder <folder>", "folder with repo")
   .option("-r, --repo <repo>", "repo name")
   .option("-d, --developer <developer>", "developer name")
-  .option("-p, --pm <pm>", "package manager: yarn | npm")
+  .option("-m, --manager <pm>", "package manager: yarn | npm")
   .option("-j, --jwt <jwt>", "JWT token");
 
 program
   .command("deploy")
   .description("deploy the repo to the cloud")
+  .option("-p, --protect", "protect the deployment from changes")
+  .option("-e, --exclude [folders...]", "exclude folders from deployment")
   .action(async (options) => {
-    console.log(`Deploying the repo to the cloud...`);
     console.time("deployed");
-    await deploy();
+    await deploy(options);
     console.timeEnd("deployed");
   });
 

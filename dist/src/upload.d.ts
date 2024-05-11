@@ -4,5 +4,6 @@ export declare function upload(params: {
     mimeType: string | undefined;
     developer: string;
     repo: string;
+    version: string;
     JWT?: string;
 }): Promise<void>;

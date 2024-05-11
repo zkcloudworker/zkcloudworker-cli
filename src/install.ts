@@ -2,7 +2,6 @@ import { zkCloudWorkerRequest } from "./api";
 import { sleep } from "./sleep";
 import { debug } from "./debug";
 import chalk from "chalk";
-import { all } from "axios";
 
 /*
 export async function zkCloudWorkerRequest(params: {
@@ -22,23 +21,27 @@ export async function install(params: {
   JWT?: string;
   repo: string;
   developer: string;
+  version: string;
+  size: number;
+  protect: boolean;
   packageManager: string;
 }) {
-  const { JWT, repo, developer, packageManager } = params;
+  const { JWT, repo, developer, version, size, packageManager, protect } =
+    params;
 
   let answer = await zkCloudWorkerRequest({
     command: "deploy",
     developer,
     repo,
     task: "deploy",
-    args: packageManager,
-    metadata: `deploy ${repo} by ${developer} using ${packageManager} package manager`,
+    args: JSON.stringify({ packageManager, version, size, protect }, null, 2),
+    metadata: `deploy ${repo} v. ${version} by ${developer} using ${packageManager} package manager`,
     mode: "async",
     JWT,
   });
   if (debug()) console.log(`deploy api call result:`, answer);
   const jobId = answer.jobId;
-  console.log(`Installing dependencies, install job id:`, jobId);
+  console.log(`Installing repo, install job id:`, jobId);
   console.log(`This may take a few minutes...`);
   let result: string | undefined = undefined;
   const allLogs: string[] = [];
@@ -78,25 +81,26 @@ export async function install(params: {
     )
       print(answer.logs, debug());
     isAllLogsFetchedFlag = isAllLogsFetched(allLogs);
-    if (
-      answer.jobStatus === "failed" &&
-      debug() === false &&
-      isAllLogsFetchedFlag === true
-    ) {
+    if (answer.jobStatus === "failed" && isAllLogsFetchedFlag === true) {
       if (
         answer?.logs !== undefined &&
         answer?.logs !== null &&
         Array.isArray(answer.logs) === true
       )
         print(answer.logs, true);
-      console.error(
-        chalk.red(`ERROR: Deployment failed`) + result ? `: ${result}` : ""
+      await sleep(1000);
+      console.log(
+        chalk.red(`ERROR: Deployment failed`) +
+          (result !== undefined ? `: ${result}` : "")
       );
       process.exit(1);
     }
   }
   if (result !== "deployed") {
-    console.error(chalk.red(`ERROR: Deployment failed: `) + result);
+    console.log(
+      chalk.red(`ERROR: Deployment failed`) +
+        (result !== undefined ? `: ${result}` : "")
+    );
     process.exit(1);
   } else {
     console.log(chalk.green(`SUCCESS: Deployment completed`));

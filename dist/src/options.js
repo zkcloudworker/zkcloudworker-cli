@@ -36,6 +36,7 @@ async function options() {
         console.error(`Developer name is not provided`);
         process.exit(1);
     }
+    const version = packageJSON.version ?? "0.1.0";
     const JWT = cli_1.program.opts().jwt ?? defaultConfig.jwt;
     /* TODO: check JWT
     if (!JWT) {
@@ -53,7 +54,7 @@ async function options() {
         packageManager = defaultConfig.packageManager;
     if (!packageManager)
         packageManager = "npm";
-    const result = { developer, repo, JWT, packageManager };
+    const result = { developer, repo, version, JWT, packageManager };
     if ((0, debug_1.debug)())
         console.log("options used:", result);
     return result;

@@ -7,9 +7,10 @@ export async function upload(params: {
   mimeType: string | undefined;
   developer: string;
   repo: string;
+  version: string;
   JWT?: string;
 }): Promise<void> {
-  const { data, mimeType, developer, repo, JWT } = params;
+  const { data, mimeType, developer, repo, version, JWT } = params;
   try {
     if (debug()) console.log("upload", { developer, repo, mimeType });
 
@@ -17,6 +18,7 @@ export async function upload(params: {
       command: "presignedUrl",
       developer,
       repo,
+      args: version,
       task: "presignedUrl",
       metadata: `presignedUrl for ${repo} by ${developer}`,
       mode: "sync",
