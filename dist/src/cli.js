@@ -34,6 +34,7 @@ exports.program
     console.log(`Saving default configuration...`);
     await (0, config_1.writeConfig)(exports.program.opts() ?? {});
 });
+//TODO: add the unprotect command after JWT format upgrade
 async function main() {
     console.log(`zkCloudWorker CLI tool v${package_json_1.version} (c) DFST 2024 www.zkcloudworker.com\n`);
     await exports.program.parseAsync();

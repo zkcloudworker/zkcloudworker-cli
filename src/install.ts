@@ -3,20 +3,6 @@ import { sleep } from "./sleep";
 import { debug } from "./debug";
 import chalk from "chalk";
 
-/*
-export async function zkCloudWorkerRequest(params: {
-  command: string;
-  task?: string;
-  transactions?: string[];
-  args?: string;
-  metadata?: string;
-  mode?: string;
-  jobId?: string;
-  repo: string;
-  developer: string;
-}) {
-*/
-
 export async function install(params: {
   JWT?: string;
   repo: string;
