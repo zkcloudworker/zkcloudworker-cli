@@ -1,5 +1,6 @@
 import { write, load, isFileExist } from "./files";
 import { debug } from "./debug";
+import chalk from "chalk";
 
 export async function writeConfig(config: object): Promise<void> {
   if (debug()) console.log("Writing config:\n", config);
@@ -11,7 +12,7 @@ export async function writeConfig(config: object): Promise<void> {
     });
     console.log(`New default configuration has been set`, config);
   } catch (e) {
-    console.error(e);
+    console.error(chalk.red("Error saving config"), e);
   }
 }
 

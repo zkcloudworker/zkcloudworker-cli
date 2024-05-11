@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.upload = void 0;
 const api_1 = require("./api");
 const axios_1 = __importDefault(require("axios"));
+const chalk_1 = __importDefault(require("chalk"));
 const debug_1 = require("./debug");
 async function upload(params) {
     const { data, mimeType, developer, repo, version, JWT } = params;
@@ -32,17 +33,16 @@ async function upload(params) {
         }
         const url = answer.url;
         if (url === undefined) {
-            console.error("Error: cannot get presignedUrl");
+            console.error(chalk_1.default.red("Error: cannot get presignedUrl"));
             process.exit(1);
         }
-        if ((0, debug_1.debug)())
-            console.log(`presignedUrl:`, url);
+        //if (debug()) console.log(`presignedUrl:`, url);
         const response = await axios_1.default.put(url, data);
         if ((0, debug_1.debug)())
-            console.log("Success: upload: put", response.status, response.statusText);
+            console.log(chalk_1.default.green("Success: upload:"), response.status, response.statusText);
     }
     catch (error) {
-        console.error("Error: S3File: put", error);
+        console.error(chalk_1.default.red("Error: upload:"), error);
         process.exit(1);
     }
 }
