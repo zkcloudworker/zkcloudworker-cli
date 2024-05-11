@@ -10,17 +10,23 @@ const zip_1 = require("./zip");
 const upload_1 = require("./upload");
 const install_1 = require("./install");
 const debug_1 = require("./debug");
+const chalk_1 = __importDefault(require("chalk"));
 const promises_1 = __importDefault(require("fs/promises"));
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
+const MAX_FILE_SIZE_MB = 1;
+const MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024;
 async function deploy(params) {
     console.log(`Deploying the repo to the cloud...`, params);
     const { protect, exclude } = params;
     const { repo, developer, version, JWT, packageManager } = await (0, options_1.options)();
+    if (JWT === undefined && protect === true) {
+        console.error(chalk_1.default.red(`Error:`) + ` JWT must be provided to protect the repo`);
+        process.exit(1);
+    }
     console.log("Creating zip file...");
     await (0, files_1.createDirectories)();
     const zipFileName = await (0, zip_1.zip)(repo, exclude ?? []);
     if (!zipFileName) {
-        console.error("Error creating zip file");
+        console.error(chalk_1.default.red("Error creating zip file"));
         return;
     }
     if ((0, debug_1.debug)())
@@ -30,13 +36,14 @@ async function deploy(params) {
     if ((0, debug_1.debug)())
         console.log("Zip file size:", size.toLocaleString(), "bytes");
     if (size > MAX_FILE_SIZE) {
-        console.error(`Zip file is too big: ${stat.size} bytes (max ${MAX_FILE_SIZE} bytes)`);
+        console.error(chalk_1.default.red(`Error:`) +
+            ` zip file is too big: ${(stat.size / 1024 / 1024).toFixed(2)} MB, maximum allowed size is ${MAX_FILE_SIZE_MB} MB)`);
         return;
     }
     console.log("Uploading zip file to zkCloudWorker's cloud storage...");
     const data = await (0, files_1.loadBinary)(zipFileName);
     if (!data) {
-        console.error("Error reading zip file");
+        console.error(chalk_1.default.red("Error reading zip file"));
         return;
     }
     await (0, upload_1.upload)({

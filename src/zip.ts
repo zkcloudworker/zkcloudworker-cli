@@ -2,6 +2,7 @@ import { createWriteStream, promises as fs } from "fs";
 import archiver from "archiver";
 import { folder, rootFolder, isExist } from "./files";
 import { debug } from "./debug";
+import chalk from "chalk";
 
 export async function zip(
   repo: string,
@@ -57,7 +58,7 @@ export async function zip(
     await streamFinished;
     return zipFileName;
   } catch (e) {
-    console.error(`Error zipping ${repo}`, e);
+    console.error(chalk.red(`Error zipping ${repo}`), e);
     return undefined;
   }
 }

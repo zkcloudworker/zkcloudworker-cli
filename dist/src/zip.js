@@ -8,6 +8,7 @@ const fs_1 = require("fs");
 const archiver_1 = __importDefault(require("archiver"));
 const files_1 = require("./files");
 const debug_1 = require("./debug");
+const chalk_1 = __importDefault(require("chalk"));
 async function zip(repo, exclude) {
     try {
         const sourceDir = (0, files_1.rootFolder)();
@@ -54,7 +55,7 @@ async function zip(repo, exclude) {
         return zipFileName;
     }
     catch (e) {
-        console.error(`Error zipping ${repo}`, e);
+        console.error(chalk_1.default.red(`Error zipping ${repo}`), e);
         return undefined;
     }
 }

@@ -8,19 +8,6 @@ const api_1 = require("./api");
 const sleep_1 = require("./sleep");
 const debug_1 = require("./debug");
 const chalk_1 = __importDefault(require("chalk"));
-/*
-export async function zkCloudWorkerRequest(params: {
-  command: string;
-  task?: string;
-  transactions?: string[];
-  args?: string;
-  metadata?: string;
-  mode?: string;
-  jobId?: string;
-  repo: string;
-  developer: string;
-}) {
-*/
 async function install(params) {
     const { JWT, repo, developer, version, size, packageManager, protect } = params;
     let answer = await (0, api_1.zkCloudWorkerRequest)({

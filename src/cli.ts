@@ -1,7 +1,6 @@
 #! /usr/bin/env ts-node
 import { Command } from "commander";
 import { writeConfig } from "./config";
-import { debug } from "./debug";
 import { deploy } from "./deploy";
 import { version } from "../package.json";
 
@@ -36,6 +35,8 @@ program
     console.log(`Saving default configuration...`);
     await writeConfig(program.opts() ?? {});
   });
+
+//TODO: add the unprotect command after JWT format upgrade
 
 async function main() {
   console.log(
