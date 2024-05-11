@@ -42,10 +42,13 @@ The package should have at the root directory index.ts file that exports the zkc
 
 ```typescript
 // index.ts at the package root directory
-import { Cloud, zkCloudWorker } from "zkcloudworker";
+import { Cloud, zkCloudWorker, initBlockchain } from "zkcloudworker";
+import { initializeBindings } from "o1js";
 import { MyWorker } from "./src/worker";
 
 export async function zkcloudworker(cloud: Cloud): Promise<zkCloudWorker> {
+  await initializeBindings();
+  await initBlockchain(cloud.chain);
   return new MyWorker(cloud);
 }
 ```
