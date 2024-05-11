@@ -27,8 +27,7 @@ export async function install(params: {
   });
   if (debug()) console.log(`deploy api call result:`, answer);
   const jobId = answer.jobId;
-  console.log(`Installing repo, install job id:`, jobId);
-  console.log(`This may take a few minutes...`);
+  console.log(`Installing repo, this may take a few minutes...`);
   let result: string | undefined = undefined;
   const allLogs: string[] = [];
   const printedLogs: string[] = [];

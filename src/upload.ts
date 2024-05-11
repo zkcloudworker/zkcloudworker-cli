@@ -1,5 +1,6 @@
 import { zkCloudWorkerRequest } from "./api";
 import axios from "axios";
+import chalk from "chalk";
 import { debug } from "./debug";
 
 export async function upload(params: {
@@ -35,17 +36,21 @@ export async function upload(params: {
     }
     const url = answer.url;
     if (url === undefined) {
-      console.error("Error: cannot get presignedUrl");
+      console.error(chalk.red("Error: cannot get presignedUrl"));
       process.exit(1);
     }
-    if (debug()) console.log(`presignedUrl:`, url);
+    //if (debug()) console.log(`presignedUrl:`, url);
 
     const response = await axios.put(url, data);
 
     if (debug())
-      console.log("Success: upload: put", response.status, response.statusText);
+      console.log(
+        chalk.green("Success: upload:"),
+        response.status,
+        response.statusText
+      );
   } catch (error: any) {
-    console.error("Error: S3File: put", error);
+    console.error(chalk.red("Error: upload:"), error);
     process.exit(1);
   }
 }

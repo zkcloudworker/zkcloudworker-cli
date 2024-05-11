@@ -1,8 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getConfig = exports.writeConfig = void 0;
 const files_1 = require("./files");
 const debug_1 = require("./debug");
+const chalk_1 = __importDefault(require("chalk"));
 async function writeConfig(config) {
     if ((0, debug_1.debug)())
         console.log("Writing config:\n", config);
@@ -15,7 +19,7 @@ async function writeConfig(config) {
         console.log(`New default configuration has been set`, config);
     }
     catch (e) {
-        console.error(e);
+        console.error(chalk_1.default.red("Error saving config"), e);
     }
 }
 exports.writeConfig = writeConfig;
