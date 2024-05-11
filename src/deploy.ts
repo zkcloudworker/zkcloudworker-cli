@@ -4,25 +4,58 @@ import { zip } from "./zip";
 import { upload } from "./upload";
 import { install } from "./install";
 import { debug } from "./debug";
+import fs from "fs/promises";
 
-export async function deploy() {
-  const { repo, developer, JWT, packageManager } = await options();
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+export async function deploy(params: {
+  protect?: boolean;
+  exclude?: string[];
+}) {
+  console.log(`Deploying the repo to the cloud...`, params);
+  const { protect, exclude } = params;
+  const { repo, developer, version, JWT, packageManager } = await options();
 
   console.log("Creating zip file...");
   await createDirectories();
-  const zipFileName = await zip(repo);
+  const zipFileName = await zip(repo, exclude ?? []);
   if (!zipFileName) {
     console.error("Error creating zip file");
     return;
   }
   if (debug()) console.log("Zip file created:", zipFileName);
-  console.log("Uploading zip file to zkCloudWorker's S3 storage...");
+
+  const stat = await fs.stat(zipFileName);
+  const size = stat.size;
+  if (debug()) console.log("Zip file size:", size.toLocaleString(), "bytes");
+  if (size > MAX_FILE_SIZE) {
+    console.error(
+      `Zip file is too big: ${stat.size} bytes (max ${MAX_FILE_SIZE} bytes)`
+    );
+    return;
+  }
+  console.log("Uploading zip file to zkCloudWorker's cloud storage...");
   const data = await loadBinary(zipFileName);
   if (!data) {
     console.error("Error reading zip file");
     return;
   }
-  await upload({ data, mimeType: "application/zip", developer, repo, JWT });
+  await upload({
+    data,
+    mimeType: "application/zip",
+    developer,
+    repo,
+    version,
+    JWT,
+  });
 
-  await install({ JWT, repo, developer, packageManager });
+  await install({
+    JWT,
+    repo,
+    developer,
+    version,
+    size,
+    packageManager,
+    protect: protect ?? false,
+  });
 }

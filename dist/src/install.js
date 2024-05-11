@@ -22,21 +22,21 @@ export async function zkCloudWorkerRequest(params: {
 }) {
 */
 async function install(params) {
-    const { JWT, repo, developer, packageManager } = params;
+    const { JWT, repo, developer, version, size, packageManager, protect } = params;
     let answer = await (0, api_1.zkCloudWorkerRequest)({
         command: "deploy",
         developer,
         repo,
         task: "deploy",
-        args: packageManager,
-        metadata: `deploy ${repo} by ${developer} using ${packageManager} package manager`,
+        args: JSON.stringify({ packageManager, version, size, protect }, null, 2),
+        metadata: `deploy ${repo} v. ${version} by ${developer} using ${packageManager} package manager`,
         mode: "async",
         JWT,
     });
     if ((0, debug_1.debug)())
         console.log(`deploy api call result:`, answer);
     const jobId = answer.jobId;
-    console.log(`Installing dependencies, install job id:`, jobId);
+    console.log(`Installing repo, install job id:`, jobId);
     console.log(`This may take a few minutes...`);
     let result = undefined;
     const allLogs = [];
@@ -69,19 +69,20 @@ async function install(params) {
             Array.isArray(answer.logs) === true)
             print(answer.logs, (0, debug_1.debug)());
         isAllLogsFetchedFlag = isAllLogsFetched(allLogs);
-        if (answer.jobStatus === "failed" &&
-            (0, debug_1.debug)() === false &&
-            isAllLogsFetchedFlag === true) {
+        if (answer.jobStatus === "failed" && isAllLogsFetchedFlag === true) {
             if (answer?.logs !== undefined &&
                 answer?.logs !== null &&
                 Array.isArray(answer.logs) === true)
                 print(answer.logs, true);
-            console.error(chalk_1.default.red(`ERROR: Deployment failed`) + result ? `: ${result}` : "");
+            await (0, sleep_1.sleep)(1000);
+            console.log(chalk_1.default.red(`ERROR: Deployment failed`) +
+                (result !== undefined ? `: ${result}` : ""));
             process.exit(1);
         }
     }
     if (result !== "deployed") {
-        console.error(chalk_1.default.red(`ERROR: Deployment failed: `) + result);
+        console.log(chalk_1.default.red(`ERROR: Deployment failed`) +
+            (result !== undefined ? `: ${result}` : ""));
         process.exit(1);
     }
     else {

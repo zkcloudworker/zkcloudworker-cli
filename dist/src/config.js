@@ -21,6 +21,8 @@ async function writeConfig(config) {
 exports.writeConfig = writeConfig;
 async function getConfig() {
     try {
+        if (!(await (0, files_1.isFileExist)("config")))
+            return undefined;
         const data = await (0, files_1.load)("config");
         if ((0, debug_1.debug)())
             console.log("config:", data);

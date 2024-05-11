@@ -1,4 +1,4 @@
-import { write, load } from "./files";
+import { write, load, isFileExist } from "./files";
 import { debug } from "./debug";
 
 export async function writeConfig(config: object): Promise<void> {
@@ -17,6 +17,7 @@ export async function writeConfig(config: object): Promise<void> {
 
 export async function getConfig(): Promise<object | undefined> {
   try {
+    if (!(await isFileExist("config"))) return undefined;
     const data = await load("config");
     if (debug()) console.log("config:", data);
     return data;

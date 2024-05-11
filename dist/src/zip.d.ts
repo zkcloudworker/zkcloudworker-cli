@@ -1,1 +1,1 @@
-export declare function zip(repo: string): Promise<string | undefined>;
+export declare function zip(repo: string, exclude: string[]): Promise<string | undefined>;

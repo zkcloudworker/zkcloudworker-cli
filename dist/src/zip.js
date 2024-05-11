@@ -8,7 +8,7 @@ const fs_1 = require("fs");
 const archiver_1 = __importDefault(require("archiver"));
 const files_1 = require("./files");
 const debug_1 = require("./debug");
-async function zip(repo) {
+async function zip(repo, exclude) {
     try {
         const sourceDir = (0, files_1.rootFolder)();
         const zipFileName = (0, files_1.folder)() + `${repo}.zip`;
@@ -34,6 +34,14 @@ async function zip(repo) {
                 ".yarn/**",
                 ".zkcloudworker/**",
                 "dist/**",
+                "test/**",
+                "tests/**",
+                "cache/**",
+                "pnp.cjs",
+                ".pnp.loader.mjs",
+                ".vscode/**",
+                ".DS_Store",
+                ...exclude,
             ],
             dot: true,
         });

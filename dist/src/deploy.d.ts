@@ -1,1 +1,4 @@
-export declare function deploy(): Promise<void>;
+export declare function deploy(params: {
+    protect?: boolean;
+    exclude?: string[];
+}): Promise<void>;

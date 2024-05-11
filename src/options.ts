@@ -6,6 +6,7 @@ import { debug } from "./debug";
 export async function options(): Promise<{
   developer: string;
   repo: string;
+  version: string;
   JWT?: string;
   packageManager: string;
 }> {
@@ -40,6 +41,9 @@ export async function options(): Promise<{
     console.error(`Developer name is not provided`);
     process.exit(1);
   }
+
+  const version = packageJSON.version ?? "0.1.0";
+
   const JWT = program.opts().jwt ?? defaultConfig.jwt;
   /* TODO: check JWT 
   if (!JWT) {
@@ -60,7 +64,7 @@ export async function options(): Promise<{
   if (!packageManager) packageManager = defaultConfig.packageManager;
   if (!packageManager) packageManager = "npm";
 
-  const result = { developer, repo, JWT, packageManager };
+  const result = { developer, repo, version, JWT, packageManager };
   if (debug()) console.log("options used:", result);
   return result;
 }

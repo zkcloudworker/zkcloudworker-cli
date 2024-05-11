@@ -8,7 +8,7 @@ const api_1 = require("./api");
 const axios_1 = __importDefault(require("axios"));
 const debug_1 = require("./debug");
 async function upload(params) {
-    const { data, mimeType, developer, repo, JWT } = params;
+    const { data, mimeType, developer, repo, version, JWT } = params;
     try {
         if ((0, debug_1.debug)())
             console.log("upload", { developer, repo, mimeType });
@@ -16,6 +16,7 @@ async function upload(params) {
             command: "presignedUrl",
             developer,
             repo,
+            args: version,
             task: "presignedUrl",
             metadata: `presignedUrl for ${repo} by ${developer}`,
             mode: "sync",
