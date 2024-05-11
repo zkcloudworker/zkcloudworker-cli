@@ -13,7 +13,7 @@
         "web3",
         "zero knowledge"
     ],
-    "version": "0.3.11",
+    "version": "0.3.12",
     "author": "dfst.io",
     "license": "Apache-2.0",
     "homepage": "https://docs.zkcloudworker.com",
@@ -44,7 +44,6 @@
         "typescript": "^5.4.5"
     },
     "dependencies": {
-        "@aws-sdk/client-s3": "^3.574.0",
         "archiver": "^7.0.1",
         "axios": "^1.6.8",
         "chalk": "^4.1.2",
