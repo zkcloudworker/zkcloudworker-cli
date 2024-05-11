@@ -75,15 +75,25 @@ Options:
   -f, --folder <folder>        folder with repo
   -r, --repo <repo>            repo name
   -d, --developer <developer>  developer name
-  -p, --pm <pm>                package manager: yarn | npm
+  -m, --manager <pm>           package manager: yarn | npm
   -j, --jwt <jwt>              JWT token
   -h, --help                   display help for command
 
 Commands:
-  deploy                       deploy the repo to the cloud
+  deploy [options]             deploy the repo to the cloud
   config                       save default configuration
   help [command]               display help for command
+```
 
+```
+Usage: zkCloudWorker deploy [options]
+
+deploy the repo to the cloud
+
+Options:
+  -p, --protect               protect the deployment from changes
+  -e, --exclude [folders...]  exclude folders from deployment
+  -h, --help                  display help for command
 ```
 
 ## Development
