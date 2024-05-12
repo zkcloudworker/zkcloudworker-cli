@@ -30,6 +30,7 @@ async function zip(repo, exclude) {
         archive.glob("**/*", {
             cwd: sourceDir,
             ignore: [
+                ".git/**",
                 "node_modules/**",
                 "yarn.lock",
                 ".yarn/**",
@@ -43,6 +44,7 @@ async function zip(repo, exclude) {
                 ".vscode/**",
                 ".DS_Store",
                 ...exclude,
+                ...exclude.map((e) => e + "/**"),
             ],
             dot: true,
         });
