@@ -95,7 +95,7 @@ deploy the repo to the cloud
 
 Options:
   -p, --protect               protect the deployment from changes
-  -e, --exclude [folders...]  exclude folders from deployment
+  -e, --exclude [folders...]  exclude files and folders from deployment
   -h, --help                  display help for command
 ```
 

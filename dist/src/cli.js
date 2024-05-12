@@ -21,7 +21,7 @@ exports.program
     .command("deploy")
     .description("deploy the repo to the cloud")
     .option("-p, --protect", "protect the deployment from changes")
-    .option("-e, --exclude [folders...]", "exclude folders from deployment")
+    .option("-e, --exclude [names...]", "exclude files and folders from deployment")
     .action(async (options) => {
     console.time("deployed");
     await (0, deploy_1.deploy)(options);
