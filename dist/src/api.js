@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.zkCloudWorkerRequest = void 0;
 const axios_1 = __importDefault(require("axios"));
+const chalk_1 = __importDefault(require("chalk"));
 async function zkCloudWorkerRequest(params) {
     try {
         const { command, task, transactions, args, metadata, mode, jobId, repo, developer, JWT, includeLogs, } = params;
@@ -31,7 +32,7 @@ async function zkCloudWorkerRequest(params) {
         return response.data;
     }
     catch (error) {
-        console.error("Error: zkCloudWorkerRequest:", error?.message ?? error?.data ?? error);
+        console.error(chalk_1.default.red("Error while sending request to zkCloudWorker:"), error?.message ?? error?.data ?? error);
         process.exit(1);
     }
 }

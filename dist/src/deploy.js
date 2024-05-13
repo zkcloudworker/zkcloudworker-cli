@@ -15,9 +15,15 @@ const promises_1 = __importDefault(require("fs/promises"));
 const MAX_FILE_SIZE_MB = 1;
 const MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024;
 async function deploy(params) {
-    console.log(`Deploying the repo to the cloud...`, params);
     const { protect, exclude } = params;
     const { repo, developer, version, JWT, packageManager } = await (0, options_1.options)();
+    console.log(`Deploying the repo to the cloud...`, {
+        developer,
+        repo,
+        version,
+        packageManager,
+        ...params,
+    });
     if (JWT === undefined && protect === true) {
         console.error(chalk_1.default.red(`Error:`) + ` JWT must be provided to protect the repo`);
         process.exit(1);
