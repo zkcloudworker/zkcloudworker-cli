@@ -14,9 +14,16 @@ export async function deploy(params: {
   protect?: boolean;
   exclude?: string[];
 }) {
-  console.log(`Deploying the repo to the cloud...`, params);
   const { protect, exclude } = params;
   const { repo, developer, version, JWT, packageManager } = await options();
+  console.log(`Deploying the repo to the cloud...`, {
+    developer,
+    repo,
+    version,
+    packageManager,
+    ...params,
+  });
+
   if (JWT === undefined && protect === true) {
     console.error(
       chalk.red(`Error:`) + ` JWT must be provided to protect the repo`

@@ -1,4 +1,5 @@
 import axios from "axios";
+import chalk from "chalk";
 
 export async function zkCloudWorkerRequest(params: {
   command: string;
@@ -53,7 +54,7 @@ export async function zkCloudWorkerRequest(params: {
     return response.data;
   } catch (error: any) {
     console.error(
-      "Error: zkCloudWorkerRequest:",
+      chalk.red("Error while sending request to zkCloudWorker:"),
       error?.message ?? error?.data ?? error
     );
     process.exit(1);
