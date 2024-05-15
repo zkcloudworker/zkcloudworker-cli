@@ -32,53 +32,44 @@ export async function install(params: {
   const allLogs: string[] = [];
   const printedLogs: string[] = [];
 
-  function print(logs: string[], printLogs: boolean) {
+  function print(logs: string[]) {
     allLogs.push(...logs);
     logs.forEach((log) => {
       if (printedLogs.includes(log) === false) {
         printedLogs.push(log);
         // replace all occurrences of "error" with red color
-
-        if (printLogs) {
-          const text = log.replace(/error/gi, (matched) => chalk.red(matched));
-          console.log(text);
-        }
+        const text = log.replace(/error/gi, (matched) => chalk.red(matched));
       }
     });
   }
-
+  let printLogs = debug();
   let isAllLogsFetchedFlag = false;
 
   while (result === undefined || isAllLogsFetchedFlag === false) {
-    await sleep(10000);
+    await sleep(5000);
     answer = await zkCloudWorkerRequest({
       command: "jobResult",
       jobId,
-      includeLogs: true,
+      includeLogs: printLogs,
     });
     result = answer.result;
+    isAllLogsFetchedFlag = answer.isFullLog ?? false;
 
-    //if (debug()) console.log(`jobResult api call result:`, answer);
     if (
+      printLogs &&
       answer?.logs !== undefined &&
       answer?.logs !== null &&
       Array.isArray(answer.logs) === true
     )
-      print(answer.logs, debug());
-    isAllLogsFetchedFlag = isAllLogsFetched(allLogs);
-    if (answer.jobStatus === "failed" && isAllLogsFetchedFlag === true) {
-      if (
-        answer?.logs !== undefined &&
-        answer?.logs !== null &&
-        Array.isArray(answer.logs) === true
-      )
-        print(answer.logs, true);
-      await sleep(1000);
-      console.log(
-        chalk.red(`ERROR: Deployment failed`) +
-          (result !== undefined ? `: ${result}` : "")
-      );
-      process.exit(1);
+      print(answer.logs);
+
+    if (
+      answer.jobStatus === "failed" ||
+      (answer.result !== undefined && result !== "deployed")
+    ) {
+      printLogs = true;
+    } else if (answer.jobStatus === "finished" && result === "deployed") {
+      isAllLogsFetchedFlag = debug() === false;
     }
   }
   if (result !== "deployed") {
@@ -90,9 +81,4 @@ export async function install(params: {
   } else {
     console.log(chalk.green(`SUCCESS: Deployment completed`));
   }
-}
-
-function isAllLogsFetched(logs: string[]): boolean {
-  // search for "Billed Duration" in the logs and return true if found
-  return logs.some((log) => log.includes("Billed Duration"));
 }

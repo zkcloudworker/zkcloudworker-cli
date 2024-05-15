@@ -27,43 +27,38 @@ async function install(params) {
     let result = undefined;
     const allLogs = [];
     const printedLogs = [];
-    function print(logs, printLogs) {
+    function print(logs) {
         allLogs.push(...logs);
         logs.forEach((log) => {
             if (printedLogs.includes(log) === false) {
                 printedLogs.push(log);
                 // replace all occurrences of "error" with red color
-                if (printLogs) {
-                    const text = log.replace(/error/gi, (matched) => chalk_1.default.red(matched));
-                    console.log(text);
-                }
+                const text = log.replace(/error/gi, (matched) => chalk_1.default.red(matched));
             }
         });
     }
+    let printLogs = (0, debug_1.debug)();
     let isAllLogsFetchedFlag = false;
     while (result === undefined || isAllLogsFetchedFlag === false) {
-        await (0, sleep_1.sleep)(10000);
+        await (0, sleep_1.sleep)(5000);
         answer = await (0, api_1.zkCloudWorkerRequest)({
             command: "jobResult",
             jobId,
-            includeLogs: true,
+            includeLogs: printLogs,
         });
         result = answer.result;
-        //if (debug()) console.log(`jobResult api call result:`, answer);
-        if (answer?.logs !== undefined &&
+        isAllLogsFetchedFlag = answer.isFullLog ?? false;
+        if (printLogs &&
+            answer?.logs !== undefined &&
             answer?.logs !== null &&
             Array.isArray(answer.logs) === true)
-            print(answer.logs, (0, debug_1.debug)());
-        isAllLogsFetchedFlag = isAllLogsFetched(allLogs);
-        if (answer.jobStatus === "failed" && isAllLogsFetchedFlag === true) {
-            if (answer?.logs !== undefined &&
-                answer?.logs !== null &&
-                Array.isArray(answer.logs) === true)
-                print(answer.logs, true);
-            await (0, sleep_1.sleep)(1000);
-            console.log(chalk_1.default.red(`ERROR: Deployment failed`) +
-                (result !== undefined ? `: ${result}` : ""));
-            process.exit(1);
+            print(answer.logs);
+        if (answer.jobStatus === "failed" ||
+            (answer.result !== undefined && result !== "deployed")) {
+            printLogs = true;
+        }
+        else if (answer.jobStatus === "finished" && result === "deployed") {
+            isAllLogsFetchedFlag = (0, debug_1.debug)() === false;
         }
     }
     if (result !== "deployed") {
@@ -76,7 +71,3 @@ async function install(params) {
     }
 }
 exports.install = install;
-function isAllLogsFetched(logs) {
-    // search for "Billed Duration" in the logs and return true if found
-    return logs.some((log) => log.includes("Billed Duration"));
-}
