@@ -39,6 +39,7 @@ export async function install(params: {
         printedLogs.push(log);
         // replace all occurrences of "error" with red color
         const text = log.replace(/error/gi, (matched) => chalk.red(matched));
+        console.log(text);
       }
     });
   }
@@ -52,8 +53,9 @@ export async function install(params: {
       jobId,
       includeLogs: printLogs,
     });
+    //console.log("answer", answer);
     result = answer.result;
-    isAllLogsFetchedFlag = answer.isFullLog ?? false;
+    isAllLogsFetchedFlag = (answer.isFullLog ?? false) || isAllLogsFetchedFlag;
 
     if (
       printLogs &&
