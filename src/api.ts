@@ -47,8 +47,7 @@ export async function zkCloudWorkerRequest(params: {
       },
       chain: `devnet`,
     };
-    const endpoint =
-      "https://cuq99yahhi.execute-api.eu-west-1.amazonaws.com/dev/zkcloudworker";
+    const endpoint = "https://api.zkcloudworker.com/v1/devnet";
 
     const response = await axios.post(endpoint, apiData);
     return response.data;
