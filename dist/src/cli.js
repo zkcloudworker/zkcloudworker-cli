@@ -6,6 +6,7 @@ const commander_1 = require("commander");
 const config_1 = require("./config");
 const deploy_1 = require("./deploy");
 const package_json_1 = require("../package.json");
+const watch_1 = require("./watch");
 exports.program = new commander_1.Command();
 exports.program
     .name("zkCloudWorker")
@@ -25,6 +26,14 @@ exports.program
     .action(async (options) => {
     console.time("deployed");
     await (0, deploy_1.deploy)(options);
+    console.timeEnd("deployed");
+});
+exports.program
+    .command("watch")
+    .description("watch the job events for the repo")
+    .action(async () => {
+    console.time("deployed");
+    await (0, watch_1.watch)();
     console.timeEnd("deployed");
 });
 exports.program

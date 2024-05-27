@@ -13,7 +13,7 @@
     "web3",
     "zero knowledge"
   ],
-  "version": "0.3.21",
+  "version": "0.4.0",
   "author": "dfst.io",
   "license": "Apache-2.0",
   "homepage": "https://docs.zkcloudworker.com",
@@ -47,7 +47,8 @@
     "archiver": "^7.0.1",
     "axios": "^1.6.8",
     "chalk": "^4.1.2",
-    "commander": "^12.0.0"
+    "commander": "^12.0.0",
+    "nats": "^2.26.0"
   },
   "packageManager": "yarn@4.2.2"
 }
