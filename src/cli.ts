@@ -3,6 +3,7 @@ import { Command } from "commander";
 import { writeConfig } from "./config";
 import { deploy } from "./deploy";
 import { version } from "../package.json";
+import { watch } from "./watch";
 
 export const program = new Command();
 
@@ -28,6 +29,15 @@ program
   .action(async (options) => {
     console.time("deployed");
     await deploy(options);
+    console.timeEnd("deployed");
+  });
+
+program
+  .command("watch")
+  .description("watch the job events for the repo")
+  .action(async () => {
+    console.time("deployed");
+    await watch();
     console.timeEnd("deployed");
   });
 
