@@ -7,7 +7,7 @@ export async function options(): Promise<{
   developer: string;
   repo: string;
   version: string;
-  JWT?: string;
+  JWT: string;
   packageManager: string;
 }> {
   if (debug()) console.log("Options:", program.opts());
@@ -45,12 +45,10 @@ export async function options(): Promise<{
   const version = packageJSON.version ?? "0.1.0";
 
   const JWT = program.opts().jwt ?? defaultConfig.jwt;
-  /* TODO: check JWT 
   if (!JWT) {
     console.error(`JWT is not provided`);
     process.exit(1);
   }
-  */
 
   let packageManager = program.opts().pm;
 

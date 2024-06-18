@@ -5,5 +5,5 @@ export declare function upload(params: {
     developer: string;
     repo: string;
     version: string;
-    JWT?: string;
+    JWT: string;
 }): Promise<void>;

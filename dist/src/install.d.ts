@@ -1,5 +1,5 @@
 export declare function install(params: {
-    JWT?: string;
+    JWT: string;
     repo: string;
     developer: string;
     version: string;

@@ -8,6 +8,6 @@ export declare function zkCloudWorkerRequest(params: {
     jobId?: string;
     repo?: string;
     developer?: string;
-    JWT?: string;
+    JWT: string;
     includeLogs?: boolean;
 }): Promise<any>;
