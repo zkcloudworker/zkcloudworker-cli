@@ -24,7 +24,7 @@ async function deploy(params) {
         packageManager,
         ...params,
     });
-    if (JWT === undefined && protect === true) {
+    if (JWT === undefined) {
         console.error(chalk_1.default.red(`Error:`) + ` JWT must be provided to protect the repo`);
         process.exit(1);
     }

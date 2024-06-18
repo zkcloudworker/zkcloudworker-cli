@@ -12,8 +12,7 @@ async function zkCloudWorkerRequest(params) {
         const apiData = {
             auth: "M6t4jtbBAFFXhLERHQWyEB9JA9xi4cWqmYduaCXtbrFjb7yaY7TyaXDunKDJNiUTBEcyUomNXJgC",
             command: command,
-            jwtToken: JWT ?? // TODO: remove default value
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NTkwMzQ5NDYiLCJpYXQiOjE3MDEzNTY5NzEsImV4cCI6MTczMjg5Mjk3MX0.r94tKntDvLpPJT2zzEe7HMUcOAQYQu3zWNuyFFiChD0",
+            jwtToken: JWT,
             data: {
                 task,
                 transactions: transactions ?? [],

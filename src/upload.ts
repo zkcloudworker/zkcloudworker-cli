@@ -9,7 +9,7 @@ export async function upload(params: {
   developer: string;
   repo: string;
   version: string;
-  JWT?: string;
+  JWT: string;
 }): Promise<void> {
   const { data, mimeType, developer, repo, version, JWT } = params;
   try {

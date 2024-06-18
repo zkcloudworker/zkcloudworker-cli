@@ -4,7 +4,7 @@ import { debug } from "./debug";
 import chalk from "chalk";
 
 export async function install(params: {
-  JWT?: string;
+  JWT: string;
   repo: string;
   developer: string;
   version: string;
@@ -52,6 +52,7 @@ export async function install(params: {
       command: "jobResult",
       jobId,
       includeLogs: printLogs,
+      JWT,
     });
     //console.log("answer", answer);
     result = answer.result;
