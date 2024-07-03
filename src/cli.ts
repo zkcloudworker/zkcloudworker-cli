@@ -2,6 +2,7 @@
 import { Command } from "commander";
 import { writeConfig } from "./config";
 import { deploy } from "./deploy";
+import { verify } from "./verify";
 import { version } from "../package.json";
 import { watch } from "./watch";
 
@@ -30,6 +31,19 @@ program
     console.time("deployed");
     await deploy(options);
     console.timeEnd("deployed");
+  });
+
+program
+  .command("verify")
+  .description("verify the contract of the repo")
+  .option(
+    "-e, --exclude [names...]",
+    "exclude files and folders from deployment"
+  )
+  .action(async (options) => {
+    console.time("verified");
+    await verify(options);
+    console.timeEnd("verified");
   });
 
 program
