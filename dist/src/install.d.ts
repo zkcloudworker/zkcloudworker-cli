@@ -6,4 +6,5 @@ export declare function install(params: {
     size: number;
     protect: boolean;
     packageManager: string;
+    verify?: boolean;
 }): Promise<void>;

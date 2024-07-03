@@ -5,6 +5,7 @@ exports.program = void 0;
 const commander_1 = require("commander");
 const config_1 = require("./config");
 const deploy_1 = require("./deploy");
+const verify_1 = require("./verify");
 const package_json_1 = require("../package.json");
 const watch_1 = require("./watch");
 exports.program = new commander_1.Command();
@@ -27,6 +28,15 @@ exports.program
     console.time("deployed");
     await (0, deploy_1.deploy)(options);
     console.timeEnd("deployed");
+});
+exports.program
+    .command("verify")
+    .description("verify the contract of the repo")
+    .option("-e, --exclude [names...]", "exclude files and folders from deployment")
+    .action(async (options) => {
+    console.time("verified");
+    await (0, verify_1.verify)(options);
+    console.timeEnd("verified");
 });
 exports.program
     .command("watch")
